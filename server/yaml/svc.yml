@@ -1,0 +1,34 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: api-service
+spec:
+  #type: NodePort
+  selector:
+    app: api-pod
+  ports:
+  - name: web
+    port: 80
+    targetPort: 3004
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sr-api
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: api-pod
+    spec:
+      containers:
+      - name: api-pod
+        image: _IMAGE_
+        ports:
+        - containerPort: 3004
+        env:
+        - name: NODE_ENV
+          value: _ENV_
+      imagePullSecrets:
+      - name: regcred-api

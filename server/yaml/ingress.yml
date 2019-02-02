@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: traefik-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/redirect-permanent: "true"
+    traefik.ingress.kubernetes.io/redirect-regex: "^http://(.*)"
+    traefik.ingress.kubernetes.io/redirect-replacement: "https://$1"
+    traefik.frontend.rule.type: PathPrefixStrip
+spec:
+  rules:
+  - host: v2.staging.stackraise.com
+    http:
+      paths:
+      - path: /api
+        backend:
+          serviceName: api-service
+          servicePort: 80
+      - path: /
+        backend:
+          serviceName: web-service
+          servicePort: 80
+  - host: admin.v2.staging.stackraise.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: admin-service
+          servicePort: 80
+      
+        
+          
+      
+      
