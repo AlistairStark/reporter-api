@@ -14,7 +14,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: sr-api
+  name: hdtb-api
 spec:
   replicas: 1
   template:
@@ -32,3 +32,13 @@ spec:
           value: _ENV_
       imagePullSecrets:
       - name: regcred-api
+
+
+
+
+
+      # Create Kuberntes files
+      # Setup inital setup
+      # update gitab ci
+#
+#
