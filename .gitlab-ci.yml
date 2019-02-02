@@ -37,14 +37,17 @@ deploy_dev:
     - curl -LO $K8S_STABLE_VERSION_URL
     - chmod +x ./kubectl
     - mv ./kubectl /usr/local/bin/kubectl
-    - kubectl cluster-info --kubeconfig=$KUBECONFIG
+    - mkdir ~/.kube
+    - cp $KUBECONFIG ~/.kube/config
+    - cat ~/.kube/config
+    - kubectl cluster-info
     #- CONTAINER_LOWERCASE=$(echo $CI_PROJECT_PATH | tr '[:upper:]' '[:lower:]')
     - IMAGE="registry.gitlab.com/frozen-frond-h-thon/api"
-    - kubectl config use-context $KUBECONTEXT --kubeconfig=$KUBECONFIG
+    - kubectl config use-context $KUBECONTEXT
     - sed 's#_ENV_#'$LB_ENV'#g; s#_IMAGE_#"'$IMAGE'"#g' kubernetes.tpl.yml > kubernetes.yml;
-    - kubectl delete secrets/regcred-api --kubeconfig=$KUBECONFIG || true
+    - kubectl delete secrets/regcred-api 
     - kubectl create secret docker-registry regcred-api --docker-server="registry.gitlab.com/frozen-frond-h-thon/api" --docker-username=$KUBERNETES_EMAIL --docker-password=$KUBERNETES_PASSWORD --kubeconfig=$KUBECONFIG
-    - kubectl apply -f kubernetes.yml --kubeconfig=$KUBECONFIG
+    - kubectl apply -f kubernetes.yml
     # - kubectl apply -f deploy 
     # If no error, connection to the cluster from the pipeline script is OK
     # TODO: write a deploy script
