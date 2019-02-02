@@ -35,13 +35,13 @@ deploy_dev:
     - cp $KUBECONFIG ~/.kube/config
     - cat ~/.kube/config
     - kubectl config use-context gitlab-deploy
-    - kubectl cluster-info dump
+    - kubectl cluster-info dump --insecure-skip-tls-verify="true"
     #- CONTAINER_LOWERCASE=$(echo $CI_PROJECT_PATH | tr '[:upper:]' '[:lower:]')
     - IMAGE="registry.gitlab.com/frozen-frond-h-thon/api"
     - sed 's#_ENV_#'$LB_ENV'#g; s#_IMAGE_#"'$IMAGE'"#g' kubernetes.tpl.yml > kubernetes.yml;
-    - kubectl delete secrets/regcred-api 
-    - kubectl create secret docker-registry regcred-api --docker-server="registry.gitlab.com/frozen-frond-h-thon/api" --docker-username=$KUBERNETES_EMAIL --docker-password=$KUBERNETES_PASSWORD --kubeconfig=$KUBECONFIG
-    - kubectl apply -f kubernetes.yml
+    - kubectl delete secrets/regcred-api --insecure-skip-tls-verify="true"
+    - kubectl create secret docker-registry regcred-api --docker-server="registry.gitlab.com/frozen-frond-h-thon/api" --docker-username=$KUBERNETES_EMAIL --docker-password=$KUBERNETES_PASSWORD --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify="true"
+    - kubectl apply -f kubernetes.yml --insecure-skip-tls-verify="true"
     # - kubectl apply -f deploy 
     # If no error, connection to the cluster from the pipeline script is OK
     # TODO: write a deploy script
