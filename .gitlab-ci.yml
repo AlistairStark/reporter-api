@@ -1,6 +1,5 @@
 stages:
   - build
-  - test
   - deploy
 
 variables:
@@ -20,19 +19,13 @@ build:
     - docker build -t registry.gitlab.com/moose0030/frozen-frond-h-thon/api .
     - docker push registry.gitlab.com/frozen-frond-h-thon/api
 
-test:
-  stage: test
-  script: # TODO: write a test script
-    - exit 0
-  dependencies:
-    - build
-
 deploy_dev:
   stage: deploy
   image: alpine
   environment:
     name: Dev
   script:
+    - echo $KUBECONFIG
     - apk add --no-cache curl
     - curl -LO $K8S_STABLE_VERSION_URL
     - chmod +x ./kubectl
@@ -43,7 +36,6 @@ deploy_dev:
     - kubectl cluster-info
     #- CONTAINER_LOWERCASE=$(echo $CI_PROJECT_PATH | tr '[:upper:]' '[:lower:]')
     - IMAGE="registry.gitlab.com/frozen-frond-h-thon/api"
-    - kubectl config use-context $KUBECONTEXT
     - sed 's#_ENV_#'$LB_ENV'#g; s#_IMAGE_#"'$IMAGE'"#g' kubernetes.tpl.yml > kubernetes.yml;
     - kubectl delete secrets/regcred-api 
     - kubectl create secret docker-registry regcred-api --docker-server="registry.gitlab.com/frozen-frond-h-thon/api" --docker-username=$KUBERNETES_EMAIL --docker-password=$KUBERNETES_PASSWORD --kubeconfig=$KUBECONFIG
@@ -51,5 +43,3 @@ deploy_dev:
     # - kubectl apply -f deploy 
     # If no error, connection to the cluster from the pipeline script is OK
     # TODO: write a deploy script
-  dependencies:
-    - test
