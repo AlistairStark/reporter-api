@@ -1,0 +1,102 @@
+{
+  "name": "GoogleAssistant",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {
+    "subscribe": {
+      "accepts": [
+        {
+          "arg": "email",
+          "type": "string"
+        },
+        {
+          "arg": "phrase",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "arg": "data",
+        "root": true,
+        "type": "object"
+      },
+      "http": {
+        "verb": "post",
+        "path": "/subscribe"
+      }
+    },
+    "unsubscribe": {
+      "accepts": [
+        {
+          "arg": "email",
+          "type": "string"
+        },
+        {
+          "arg": "phrase",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "arg": "data",
+        "root": true,
+        "type": "object"
+      },
+      "http": {
+        "verb": "post",
+        "path": "/unsubscribe"
+      }
+    },
+    "help": {
+      "accepts": [],
+      "returns": {
+        "arg": "data",
+        "root": true,
+        "type": "object"
+      },
+      "http": {
+        "verb": "get",
+        "path": "/help"
+      }
+    },
+    "recent": {
+      "accepts": [
+        {
+          "arg": "email",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "arg": "data",
+        "root": true,
+        "type": "object"
+      },
+      "http": {
+        "verb": "get",
+        "path": "/recent"
+      }
+    },
+    "mySubscriptions": {
+      "accepts": [
+        {
+          "arg": "email",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "arg": "data",
+        "root": true,
+        "type": "object"
+      },
+      "http": {
+        "verb": "get",
+        "path": "/my-subscriptions"
+      }
+    }
+  }
+}

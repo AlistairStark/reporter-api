@@ -1,11 +1,11 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: api-service
+  name: service-api
 spec:
   #type: NodePort
   selector:
-    app: api-pod
+    app: pod-api
   ports:
   - name: web
     port: 80
@@ -14,31 +14,18 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: hdtb-api
+  name: deployment-api
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: api-pod
+        app: pod-api
     spec:
       containers:
-      - name: api-pod
-        image: registry.gitlab.com/frozen-frond-h-thon/api:latest
+      - name: container-api
+        image: 
         ports:
         - containerPort: 3004
-        env:
-        - name: NODE_ENV
-          value: _ENV_
       imagePullSecrets:
       - name: regcred-api
-
-
-
-
-
-      # Create Kuberntes files
-      # Setup inital setup
-      # update gitab ci
-#
-#

@@ -4,11 +4,11 @@ metadata:
   name: traefik-ingress
   namespace: default
   annotations:
-    kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/redirect-permanent: "true"
-    traefik.ingress.kubernetes.io/redirect-regex: "^http://(.*)"
-    traefik.ingress.kubernetes.io/redirect-replacement: "https://$1"
-    traefik.frontend.rule.type: PathPrefixStrip
+    kubernetes.io/ingress.class: azure/application-gateway
+    #traefik.ingress.kubernetes.io/redirect-permanent: "true"
+    #traefik.ingress.kubernetes.io/redirect-regex: "^http://(.*)"
+    #traefik.ingress.kubernetes.io/redirect-replacement: "https://$1"
+    #traefik.frontend.rule.type: PathPrefixStrip
 spec:
   rules:
   - host: hdtb-team.ca
@@ -16,29 +16,29 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: api-service
+          serviceName: service-pwa
           servicePort: 80
   - host: api.hdtb-team.ca
     http:
       paths:
       - path: /
         backend:
-          serviceName: admin-service
+          serviceName: service-api
           servicePort: 80
-  - host: content.hdtb-team.ca
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: admin-service
-          servicePort: 80
-  - host: google-assistant.hdtb-team.ca
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: google-service
-          servicePort: 80
+  # - host: content.hdtb-team.ca
+  #   http:
+  #     paths:
+  #     - path: /
+  #       backend:
+  #         serviceName: admin-service
+  #         servicePort: 80
+  # - host: google-assistant.hdtb-team.ca
+  #   http:
+  #     paths:
+  #     - path: /
+  #       backend:
+  #         serviceName: google-service
+  #         servicePort: 80
       
         
           

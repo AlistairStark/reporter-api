@@ -1,0 +1,23 @@
+{
+  "name": "Account",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "password": {
+      "type": "string",
+      "default": "xxx"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "subscriptions": {
+      "type": "hasMany",
+      "model": "UserSubscription"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
