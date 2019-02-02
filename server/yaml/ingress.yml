@@ -11,23 +11,33 @@ metadata:
     traefik.frontend.rule.type: PathPrefixStrip
 spec:
   rules:
-  - host: v2.staging.stackraise.com
+  - host: hdtb-team.ca
     http:
       paths:
-      - path: /api
+      - path: /
         backend:
           serviceName: api-service
           servicePort: 80
-      - path: /
-        backend:
-          serviceName: web-service
-          servicePort: 80
-  - host: admin.v2.staging.stackraise.com
+  - host: api.hdtb-team.ca
     http:
       paths:
       - path: /
         backend:
           serviceName: admin-service
+          servicePort: 80
+  - host: content.hdtb-team.ca
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: admin-service
+          servicePort: 80
+  - host: google-assistant.hdtb-team.ca
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: google-service
           servicePort: 80
       
         
