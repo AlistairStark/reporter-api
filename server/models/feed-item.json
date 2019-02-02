@@ -1,5 +1,5 @@
 {
-  "name": "UserSubscription",
+  "name": "FeedItem",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -8,10 +8,7 @@
   "properties": {},
   "validations": [],
   "relations": {
-    "user": {
-      "type": "belongsTo",
-      "model": "Account"
-    }
+    
   },
   "acls": [],
   "methods": {}

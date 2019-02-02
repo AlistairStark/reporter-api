@@ -13,6 +13,10 @@
   },
   "validations": [],
   "relations": {
+    "feedItems": {
+      "type": "hasMany",
+      "model": "FeedItem"
+    },
     "subscriptions": {
       "type": "hasMany",
       "model": "UserSubscription"
