@@ -13,12 +13,12 @@ build:
   services:
     - docker:dind
   script:
-    - export DOCKER_VERSION=$(echo "$CI_BUILD_REF" | cut -c 1-6)    
+    #- export DOCKER_VERSION=$(echo "$CI_BUILD_REF" | cut -c 1-6)    
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
     - docker build -t registry.gitlab.com/frozen-frond-h-thon/api .
     - docker push registry.gitlab.com/frozen-frond-h-thon/api
-    - docker build -t registry.gitlab.com/moose0030/frozen-frond-h-thon/api:$DOCKER_VERSION .
-    - docker push registry.gitlab.com/frozen-frond-h-thon/api:$DOCKER_VERSION
+    - docker build -t registry.gitlab.com/moose0030/frozen-frond-h-thon/api .
+    - docker push registry.gitlab.com/frozen-frond-h-thon/api
 
 test:
   stage: test
@@ -41,7 +41,7 @@ deploy_dev:
     - cat ~/.kube/config
     - kubectl cluster-info
     #- CONTAINER_LOWERCASE=$(echo $CI_PROJECT_PATH | tr '[:upper:]' '[:lower:]')
-    - IMAGE="registry.gitlab.com/frozen-frond-h-thon/api:$DOCKER_VERSION"
+    - IMAGE="registry.gitlab.com/frozen-frond-h-thon/api"
     - kubectl config use-context $KUBECONTEXT --kubeconfig=$KUBECONFIG
     - sed 's#_ENV_#'$LB_ENV'#g; s#_IMAGE_#"'$IMAGE'"#g' kubernetes.tpl.yml > kubernetes.yml;
     - kubectl delete secrets/regcred-api --kubeconfig=$KUBECONFIG || true
