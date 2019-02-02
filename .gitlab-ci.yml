@@ -26,6 +26,7 @@ deploy_dev:
     name: Dev
   script:
     - echo $KUBECONFIG
+    - echo $KUBECONTEXT 
     - apk add --no-cache curl
     - curl -LO $K8S_STABLE_VERSION_URL
     - chmod +x ./kubectl
@@ -33,7 +34,8 @@ deploy_dev:
     - mkdir ~/.kube
     - cp $KUBECONFIG ~/.kube/config
     - cat ~/.kube/config
-    - kubectl cluster-info
+    - kubectl config use-context gitlab-deploy
+    - kubectl cluster-info dump
     #- CONTAINER_LOWERCASE=$(echo $CI_PROJECT_PATH | tr '[:upper:]' '[:lower:]')
     - IMAGE="registry.gitlab.com/frozen-frond-h-thon/api"
     - sed 's#_ENV_#'$LB_ENV'#g; s#_IMAGE_#"'$IMAGE'"#g' kubernetes.tpl.yml > kubernetes.yml;
