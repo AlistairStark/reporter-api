@@ -37,10 +37,8 @@ deploy_dev:
     - curl -LO $K8S_STABLE_VERSION_URL
     - chmod +x ./kubectl
     - mv ./kubectl /usr/local/bin/kubectl
-    - mkdir ~/.kube
-    - cp $KUBECONFIG ~/.kube/config
     - cat ~/.kube/config
-    - kubectl cluster-info
+    - kubectl cluster-info --kubeconfig=$KUBECONFIG
     #- CONTAINER_LOWERCASE=$(echo $CI_PROJECT_PATH | tr '[:upper:]' '[:lower:]')
     - IMAGE="registry.gitlab.com/frozen-frond-h-thon/api"
     - kubectl config use-context $KUBECONTEXT --kubeconfig=$KUBECONFIG
