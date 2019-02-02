@@ -29,6 +29,7 @@ test:
 
 deploy_dev:
   stage: deploy
+  image: alpine
   environment:
     name: Dev
   script:
