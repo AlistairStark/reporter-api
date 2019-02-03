@@ -17,7 +17,7 @@ module.exports = function (GoogleAssistant) {
       if (user.subscriptions.indexOf(phrase) < 0) {
         user.subscriptions.push(phrase);
         user.save();
-        return GoogleAssistant.app.models.Feed.feedUser(user.toJSON(), callback);
+        return GoogleAssistant.app.models.Feed.feedUser(user.id, phrase, callback);
       }
 
       callback();

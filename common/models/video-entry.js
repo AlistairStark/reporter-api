@@ -10,7 +10,7 @@ module.exports = function(Video) {
 
         var data = ctx.instance || {};
 
-        if (ctx.isNewInstance && data.id) {
+        if (data.id) {
             Video.app.models.FeedItem.feedVideo(data);
         }
 
@@ -59,6 +59,7 @@ module.exports = function(Video) {
 			}, []);
 
 		Video.findOrCreate({ where: { url: data.url } }, data, function(err, video, created) {
+			console.log("err: ", err);
 			if (err) return response.status(500).send(err);
 
 			if (!created) {
@@ -72,8 +73,15 @@ module.exports = function(Video) {
 					}
 				})
 
-				video.save();
-				return response.status(200).send("Success: Merged with old video");
+				if (!video.cbcId) {
+					video.cbcId = data.cbcId;
+				}
+
+				return video.save(function(err, res) {
+					console.log("err: ", err);
+					console.log("res: ", res);
+					return response.status(200).send("Success: Merged with old video");
+				});
 			}
 
 			response.status(200).send("Success: Created new");

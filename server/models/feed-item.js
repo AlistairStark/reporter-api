@@ -28,10 +28,12 @@ module.exports = function(Feed) {
 			var tasks = videos.reduce(function(arr, video) {
 				if (video.id) {
 					arr.push(function(cb) {
-						Feed.create({
+						var toAdd = {
 							userId: userId,
 							videoId: video.id
-						}, cb);
+						}
+
+						Feed.findOrCreate({ where: toAdd }, toAdd, cb);
 					})
 				}
 
@@ -58,12 +60,15 @@ module.exports = function(Feed) {
 		data = data || {};
 
 		if (!callback || typeof callback !== 'function') {
-			callback = function(err, res) { return };
+			callback = function(err, res) { console.log("returning..."); return };
 		}
+		
+		console.log("data: ", data);
 
 		if (!data.tags || !data.id) return callback();
 
-		Feed.app.models.Account.find({ where: { tags: { inq: data.tags } } }, function(err, accounts) {
+		Feed.app.models.Account.find({ where: { subscriptions: { inq: data.tags } } }, function(err, accounts) {
+			console.log("err: ", err);
 			if (err || !accounts) return callback(err);
 
 			console.log("Found accounts subscribed to any of the video's tags: ", accounts.length);
@@ -71,10 +76,12 @@ module.exports = function(Feed) {
 			var tasks = accounts.reduce(function(arr, account) {
 				if (account.id) {
 					arr.push(function(cb) {
-						Feed.create({
+						var toAdd = {
 							userId: account.id,
 							videoId: data.id
-						}, cb);
+						}
+
+						Feed.findOrCreate({ where: toAdd }, toAdd, cb);
 					})
 				}
 
