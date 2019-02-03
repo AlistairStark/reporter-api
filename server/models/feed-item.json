@@ -5,10 +5,26 @@
   "options": {
     "validateUpsert": true
   },
-  "properties": {},
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "generated": false,
+      "defaultFn": "uuid"
+    }
+  },
   "validations": [],
   "relations": {
-    
+    "user": {
+      "type": "belongsTo",
+      "model": "Account",
+      "foreignKey": "userId"
+    },
+    "video": {
+      "type": "belongsTo",
+      "model": "VideoEntry",
+      "foreignKey": "videoId"
+    }
   },
   "acls": [],
   "methods": {}

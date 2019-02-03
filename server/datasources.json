@@ -1,6 +1,7 @@
 {
   "db": {
+    "url": "mongodb://hdtb-db:7Wgtv8vfa3XF8Ihrfhcj2umlnQXmxfHAxgdpxSGWii6HfJNyY7AF6kuSDmnCf9cawNABPvUaui2qxO8OaeppYA%3D%3D@hdtb-db.documents.azure.com:10255/?ssl=true",
     "name": "db",
-    "connector": "memory"
+    "connector": "mongodb"
   }
 }

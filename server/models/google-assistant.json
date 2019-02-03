@@ -5,7 +5,14 @@
   "options": {
     "validateUpsert": true
   },
-  "properties": {},
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "generated": false,
+      "defaultFn": "uuid"
+    }
+  },
   "validations": [],
   "relations": {},
   "acls": [],

@@ -1,6 +1,6 @@
 {
-  "name": "Account",
-  "base": "User",
+  "name": "VideoEntry",
+  "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
@@ -12,23 +12,23 @@
       "generated": false,
       "defaultFn": "uuid"
     },
-    "password": {
-      "type": "string",
-      "default": "xxx"
+    "url": {
+      "type": "string"
     },
-    "subscriptions": {
+    "tags": {
       "type": [
         "string"
       ]
+    },
+    "publishedAt": {
+      "type": "number"
+    },
+    "updatedAt": {
+      "type": "number"
     }
   },
   "validations": [],
-  "relations": {
-    "feedItems": {
-      "type": "hasMany",
-      "model": "FeedItem"
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }

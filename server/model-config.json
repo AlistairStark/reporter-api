@@ -39,15 +39,15 @@
     "dataSource": "db",
     "public": true
   },
-  "UserSubscription": {
-    "dataSource": "db",
-    "public": true
-  },
   "Account": {
     "dataSource": "db",
     "public": true
   },
   "FeedItem": {
+    "dataSource": "db",
+    "public": true
+  },
+  "VideoEntry": {
     "dataSource": "db",
     "public": true
   }

@@ -6,18 +6,37 @@ module.exports = function (GoogleAssistant) {
     console.log(email, phrase);
     GoogleAssistant.app.models.Account.findOne({ where: { email: email } }, function (err, user) {
       console.log(err, user);
-      if (err || !user) return callback(new Error());
-      user.subscriptions.create({ phrase: phrase }, callback);
+      if (err || !user) return callback(err || new Error());
+
+      phrase = phrase.toLowerCase();
+
+      if (!user.subscriptions) {
+        user.subscriptions = [];
+      }
+
+      if (user.subscriptions.indexOf(phrase) < 0) {
+        user.subscriptions.push(phrase);
+        user.save();
+        return GoogleAssistant.app.models.Feed.feedUser(user.toJSON(), callback);
+      }
+
+      callback();
     });
   }
 
   GoogleAssistant.unsubscribe = function (email, phrase, callback) {
     GoogleAssistant.app.models.Account.findOne({ where: { email: email } }, function (err, user) {
       if (err || !user) return callback(new Error());
-      user.subscriptions.findOne({ phrase: phrase }, function (err, subscription) {
-        if (err || !subscription) return callback(new Error());
-        subscription.destroy(callback);
-      });
+
+      var i = (user.subscriptions || []).indexOf(phrase);
+
+      if (i >= 0) {
+        user.subscriptions.splice(i, 1);
+        user.save();
+        return GoogleAssistant.app.models.Feed.unfeedUser(user.toJSON(), callback);
+      }
+
+      callback();
     });
   }
 
@@ -36,7 +55,7 @@ module.exports = function (GoogleAssistant) {
   GoogleAssistant.mySusbcriptions = function (email, callback) {
     GoogleAssistant.app.models.Account.findOne({ where: { email: email } }, function (err, user) {
       if (err || !user) return callback(new Error());
-      user.subscriptions({}, callback);
+      callback(null, user.subscriptions);
     });
   }
 
