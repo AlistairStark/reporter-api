@@ -1,6 +1,11 @@
 'use strict';
 
+const request = require('request');
+const async = require('async');
+
 module.exports = function (GoogleAssistant) {
+
+  const CBC_VIDEO_BASE_URL = 'https://www.cbc.ca/aggregate_api/v1/items/';  // Need to add the item ID to the end of the URL
 
   GoogleAssistant.subscribe = function (data, callback) {
     console.log(data.email, data.phrase);
@@ -49,11 +54,44 @@ module.exports = function (GoogleAssistant) {
   }
 
   GoogleAssistant.recent = function (email, callback) {
-    GoogleAssistant.app.models.Account.findOne({ where: { email: email } }, function (err, user) {
+    GoogleAssistant.app.models.Account.findOne({ where: { email: email }, include: { feedItems: 'video' } }, function (err, user) {
       if (err || !user) return callback(new Error());
-      user.feedItems({}, callback);
-    });
 
+      var json = user.toJSON();
+
+      var tasks = (json.feedItems || []).reduce(function(arr, feed) {
+
+        var video = (feed || {}).video || {};
+
+        if (video.cbcId) {
+          arr.push(function(cb) {
+            request(CBC_VIDEO_BASE_URL + video.cbcId, function(error, response, body) {
+              try {
+                body = JSON.parse(body);
+                if (body.typeAttributes.show == '(not specified)') {
+                  delete body.typeAttributes.show;
+                }
+
+                body.userSubscribed = (video.tags || []).reduce(function(arr, tag) {
+                  if ((user.subscriptions || []).indexOf(tag) >= 0) {
+                    arr.push(tag);
+                  }
+                  return arr;
+                }, []);
+              }
+              catch(e) {
+                error = e;
+              }
+
+              cb(error, body);
+            })
+          })
+        }
+        return arr;
+      }, []);
+
+      async.parallel(tasks, callback);
+    });
   }
   GoogleAssistant.mySubscriptions = function (email, callback) {
     GoogleAssistant.app.models.Account.findOne({ where: { email: email } }, function (err, user) {

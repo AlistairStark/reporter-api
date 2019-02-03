@@ -26,7 +26,8 @@
   "relations": {
     "feedItems": {
       "type": "hasMany",
-      "model": "FeedItem"
+      "model": "FeedItem",
+      "foreignKey": "userId"
     }
   },
   "acls": [],
