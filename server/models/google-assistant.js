@@ -36,7 +36,7 @@ module.exports = function (GoogleAssistant) {
       if (i >= 0) {
         user.subscriptions.splice(i, 1);
         user.save();
-        return GoogleAssistant.app.models.Feed.unfeedUser(user.toJSON(), callback);
+        return GoogleAssistant.app.models.FeedItem.unfeedUser(user.toJSON(), callback);
       }
 
       callback();
