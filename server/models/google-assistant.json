@@ -20,12 +20,11 @@
     "subscribe": {
       "accepts": [
         {
-          "arg": "email",
-          "type": "string"
-        },
-        {
-          "arg": "phrase",
-          "type": "string"
+          "arg": "data",
+          "type": "object",
+          "http": {
+            "source": "body"
+          }
         }
       ],
       "returns": {

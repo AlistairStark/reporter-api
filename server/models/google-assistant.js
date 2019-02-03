@@ -2,8 +2,11 @@
 
 module.exports = function (GoogleAssistant) {
 
-  GoogleAssistant.subscribe = function (email, phrase, callback) {
-    console.log(email, phrase);
+  GoogleAssistant.subscribe = function (data, callback) {
+    console.log(data.email, data.phrase);
+    if (!data || !data.email || !data.phrase) return callback(new Error('not correct post content'));
+    let email = data.email;
+    let phrase = data.phrase;
     GoogleAssistant.app.models.Account.findOne({ where: { email: email } }, function (err, user) {
       console.log(err, user);
       if (err || !user) return callback(err || new Error());
@@ -17,7 +20,7 @@ module.exports = function (GoogleAssistant) {
       if (user.subscriptions.indexOf(phrase) < 0) {
         user.subscriptions.push(phrase);
         user.save();
-        return GoogleAssistant.app.models.Feed.feedUser(user.id, phrase, callback);
+        return GoogleAssistant.app.models.FeedItem.feedUser(user.id, phrase, callback);
       }
 
       callback();
@@ -50,9 +53,9 @@ module.exports = function (GoogleAssistant) {
       if (err || !user) return callback(new Error());
       user.feedItems({}, callback);
     });
-  }
 
-  GoogleAssistant.mySusbcriptions = function (email, callback) {
+  }
+  GoogleAssistant.mySubscriptions = function (email, callback) {
     GoogleAssistant.app.models.Account.findOne({ where: { email: email } }, function (err, user) {
       if (err || !user) return callback(new Error());
       callback(null, user.subscriptions);
